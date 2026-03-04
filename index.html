@@ -99,12 +99,12 @@
 
     <header>
         <div class="header-left">
-            <div class="logo">CloudBoard</div>
+            <div class="logo">Dio esiste?</div>
             <div class="user-tag" onclick="openNameModal()" id="userNameDisplay">Anonimo</div>
         </div>
         <nav>
-            <button class="active" onclick="navigate('lavagna')">Lavagna</button>
-            <button onclick="navigate('domande')">Domande</button>
+            <button class="active" onclick="navigate('prove')">Prove</button>
+            <button onclick="navigate('risposte')">Risposte</button>
             <button onclick="navigate('about')">About</button>
             <button id="navSettings" class="hidden" onclick="navigate('settings')">⚙️</button>
         </nav>
@@ -115,17 +115,17 @@
     </header>
 
     <main>
-        <section id="sec-lavagna">
+        <section id="sec-prove">
             <div id="notesContainer"></div>
             <button id="fabBtn" class="fab" onclick="openNoteModal()">+</button>
         </section>
 
-        <section id="sec-domande" class="hidden">
+        <section id="sec-risposte" class="hidden">
             <h2 style="font-size: 2rem; margin-bottom:25px">Area Domande</h2>
-            <div id="domandeDisplay" class="note-card" style="min-height: 250px"></div>
-            <div id="domandeEditMode" class="hidden">
-                <textarea id="domandeEditor" class="modal-input" style="min-height:350px"></textarea>
-                <button class="modal-input" style="background:var(--primary); color:white; border:none; font-weight:bold" onclick="savePageData('domande')">Aggiorna Pagina</button>
+            <div id="risposteDisplay" class="note-card" style="min-height: 250px"></div>
+            <div id="risposteEditMode" class="hidden">
+                <textarea id="risposteEditor" class="modal-input" style="min-height:350px"></textarea>
+                <button class="modal-input" style="background:var(--primary); color:white; border:none; font-weight:bold" onclick="savePageData('risposte')">Aggiorna Pagina</button>
             </div>
         </section>
 
@@ -256,7 +256,7 @@ let app = {
     user: localStorage.getItem('board_user') || 'Anonimo',
     notes: [],
     settings: { emails: [], active: true },
-    pDomande: "Caricamento in corso...",
+    prisposte: "Caricamento in corso...",
     pAbout: "Caricamento in corso..."
 };
 
@@ -270,7 +270,7 @@ window.onload = () => {
             const data = doc.data();
             app.notes = data.notes || [];
             app.settings = data.settings || { emails: [], active: true };
-            app.pDomande = data.pDomande || "Vuoto";
+            app.prisposte = data.prisposte || "Vuoto";
             app.pAbout = data.pAbout || "Vuoto";
         } else {
             // Se il documento non esiste ancora, lo crea
@@ -280,11 +280,11 @@ window.onload = () => {
         syncUI();
         
         // Se l'utente sta guardando una pagina statica, aggiorna il testo in tempo reale
-        if(!document.getElementById('sec-domande').classList.contains('hidden')) renderStatic('domande');
+        if(!document.getElementById('sec-risposte').classList.contains('hidden')) renderStatic('risposte');
         if(!document.getElementById('sec-about').classList.contains('hidden')) renderStatic('about');
     });
 
-    navigate('lavagna');
+    navigate('prove');
 };
 
 function syncUI() {
@@ -307,7 +307,7 @@ function saveToCloud() {
     db.collection("board").doc("data").set({
         notes: app.notes,
         settings: app.settings,
-        pDomande: app.pDomande,
+        prisposte: app.prisposte,
         pAbout: app.pAbout
     }).catch(error => {
         console.error("Errore di salvataggio su Firebase:", error);
@@ -323,14 +323,14 @@ function save() {
 // --- NAVIGAZIONE ---
 function navigate(page) {
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-    ['lavagna', 'domande', 'about', 'settings'].forEach(s => document.getElementById(`sec-${s}`).classList.add('hidden'));
+    ['prove', 'risposte', 'about', 'settings'].forEach(s => document.getElementById(`sec-${s}`).classList.add('hidden'));
     document.getElementById(`sec-${page}`).classList.remove('hidden');
     
     const activeBtn = Array.from(document.querySelectorAll('nav button')).find(b => b.innerText.toLowerCase().includes(page));
     if(activeBtn) activeBtn.classList.add('active');
 
-    if(page === 'domande' || page === 'about') renderStatic(page);
-    document.getElementById('fabBtn').style.display = (page === 'lavagna') ? 'flex' : 'none';
+    if(page === 'risposte' || page === 'about') renderStatic(page);
+    document.getElementById('fabBtn').style.display = (page === 'prove') ? 'flex' : 'none';
 }
 
 // --- LOGIN OWNER ---
@@ -600,4 +600,3 @@ function closeAllModals() {
     </script>
 </body>
 </html>
-
