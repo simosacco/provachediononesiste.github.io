@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="CloudBoard Ultra - Lavagna Virtuale Condivisa">
+    <title>CloudBoard Ultra</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">CloudBoard DB</div>
+            <nav id="mainNav">
+                <button class="nav-btn active" data-target="lavagna">Bacheca</button>
+                <button class="nav-btn" data-target="domande">Domande</button>
+                <button id="navSettings" class="nav-btn hidden" data-target="settings">⚙️ Setup</button>
+            </nav>
+            <div class="user-controls">
+                <div id="userNameDisplay" class="user-tag">Anonimo</div>
+                <button id="loginBtn" class="btn-outline">Login</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="sec-lavagna" class="page-section">
+            <div id="notesContainer">
+                <div class="loading-state">Connessione al database di Google in corso...</div>
+            </div>
+            <button id="fabBtn" class="fab" aria-label="Aggiungi Nota">+</button>
+        </section>
+
+        <section id="sec-domande" class="page-section hidden">
+            <div class="section-header">
+                <h2>Area Risposte & Domande</h2>
+            </div>
+            <div id="domandeDisplay" class="note-card content-display">Caricamento in corso...</div>
+            <div id="domandeEditMode" class="hidden">
+                <textarea id="domandeEditor" class="modal-input large-textarea"></textarea>
+                <button class="btn-main" id="saveDomandeBtn">Salva nel Cloud</button>
+            </div>
+        </section>
+
+        <section id="sec-settings" class="page-section hidden">
+            <div class="section-header">
+                <h2>Pannello Notifiche EmailJS</h2>
+            </div>
+            <div class="note-card settings-card">
+                <p class="text-muted">Le email verranno inviate ai seguenti indirizzi quando scattano i trigger Owner.</p>
+                <div class="input-group">
+                    <input type="email" id="emailInput" class="modal-input" placeholder="Aggiungi email ricevente...">
+                    <button id="addEmailBtn" class="btn-main">Aggiungi</button>
+                </div>
+                <div id="emailTags" class="tags-container"></div>
+                
+                <hr class="divider">
+                <label class="toggle-label">
+                    <input type="checkbox" id="globalNotify" class="toggle-checkbox">
+                    <span class="toggle-text">Attiva sistema notifiche globale</span>
+                </label>
+            </div>
+        </section>
+    </main>
+
+    <div id="modalOverlay" class="modal-overlay">
+        
+        <div id="modalLogin" class="modal-box hidden">
+            <h2>Accesso Amministratore</h2>
+            <p class="text-muted">Inserisci la chiave master per attivare i privilegi Owner.</p>
+            <input type="password" id="ownerPwd" class="modal-input" placeholder="Password Master">
+            <div class="modal-actions">
+                <button class="btn-secondary close-modal-btn">Annulla</button>
+                <button id="validateOwnerBtn" class="btn-danger">Entra</button>
+            </div>
+        </div>
+
+        <div id="modalName" class="modal-box hidden">
+            <h2>Il Tuo Profilo</h2>
+            <p class="text-muted">Come vuoi apparire sulla bacheca?</p>
+            <input type="text" id="nameIn" class="modal-input" maxlength="20" placeholder="Esempio: Marco_99">
+            <div class="modal-actions single-action">
+                <button id="updateNameBtn" class="btn-main">Conferma Nome</button>
+            </div>
+        </div>
+
+        <div id="modalNote" class="modal-box hidden">
+            <h2 id="noteHeader">Nuova Nota Online</h2>
+            <div class="modal-body">
+                <input type="text" id="noteTitle" class="modal-input" placeholder="Titolo della nota">
+                <textarea id="noteText" class="modal-input medium-textarea" placeholder="Scrivi il tuo pensiero qui..."></textarea>
+                <input type="text" id="notePass" class="modal-input" placeholder="Password segreta (per poterla modificare in futuro)">
+
+                <div id="ownerTriggers" class="owner-panel hidden">
+                    <p class="owner-panel-title">⚙️ Gestione Notifiche Avanzate</p>
+                    <label class="checkbox-label"><input type="checkbox" id="triggerEdit"> Avvisami via email se modificata</label>
+                    <label class="checkbox-label"><input type="checkbox" id="triggerComment"> Avvisami via email per nuovi commenti</label>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-secondary close-modal-btn">Esci</button>
+                    <button id="btnSubmitNote" class="btn-main">Pubblica sul Cloud</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modalVerify" class="modal-box hidden">
+            <h2>Azione Protetta</h2>
+            <p class="text-muted">Inserisci la password impostata dall'autore della nota.</p>
+            <input type="password" id="verifyPass" class="modal-input">
+            <div class="modal-actions single-action">
+                <button id="verifyBtn" class="btn-main">Sblocca</button>
+            </div>
+        </div>
+
+        <div id="modalComment" class="modal-box hidden">
+            <h2>Scrivi una risposta</h2>
+            <textarea id="commText" class="modal-input medium-textarea" placeholder="Il tuo commento costruttivo..."></textarea>
+            <div class="modal-actions single-action">
+                <button id="submitCommBtn" class="btn-main">Invia Commento</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
