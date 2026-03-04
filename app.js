@@ -5,12 +5,13 @@
 
 // --- 1. CONFIGURAZIONE CHIAVI API ---
 const firebaseConfig = {
-    apiKey: "AIzaSyBNxU564MNm9QoD1jL3z5tunJ2c4vaDgQQ",
-    authDomain: "sito-dio-esiste.firebaseapp.com",
-    projectId: "sito-dio-esiste",
-    storageBucket: "sito-dio-esiste.firebasestorage.app",
-    messagingSenderId: "761219170063",
-    appId: "1:761219170063:web:45b42c52031810a904487a"
+  apiKey: "AIzaSyDInnrtoQngbkvE6ngcHaXL02a0XryA6hQ",
+  authDomain: "clouboard.firebaseapp.com",
+  projectId: "clouboard",
+  storageBucket: "clouboard.firebasestorage.app",
+  messagingSenderId: "906289976459",
+  appId: "1:906289976459:web:a42dc7e487704436fab08e",
+  measurementId: "G-HN3ZDKXEHD"
 };
 
 const EJS_CONFIG = {
@@ -434,4 +435,5 @@ function showModal(modalId) {
 
 function closeAllModals() {
     document.getElementById('modalOverlay').classList.remove('active');
+
 }
