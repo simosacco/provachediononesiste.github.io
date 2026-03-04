@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Prova che Dio non esiste</title>
+    <title>Dimostra che Dio non esiste</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -99,7 +99,7 @@
 
     <header>
         <div class="header-left">
-            <div class="logo">Dio esiste?</div>
+            <div class="logo">Puoi dimostrare che Dio non esiste?</div>
             <div class="user-tag" onclick="openNameModal()" id="userNameDisplay">Anonimo</div>
         </div>
         <nav>
@@ -121,7 +121,7 @@
         </section>
 
         <section id="sec-risposte" class="hidden">
-            <h2 style="font-size: 2rem; margin-bottom:25px">Area Domande</h2>
+            <h2 style="font-size: 2rem; margin-bottom:25px">Area Risposte</h2>
             <div id="risposteDisplay" class="note-card" style="min-height: 250px"></div>
             <div id="risposteEditMode" class="hidden">
                 <textarea id="risposteEditor" class="modal-input" style="min-height:350px"></textarea>
@@ -162,9 +162,9 @@
         </section>
     </main>
 
-    <div id="modalOverlay" class="modal-overlay">
+    <div id="modalOverlay" class="modal-overlay" onclick="closeAllModals()">
         
-        <div id="modalLogin" class="modal-box hidden">
+        <div id="modalLogin" class="modal-box hidden" onclick="event.stopPropagation()">
             <h2 style="margin-bottom:25px">Area Riservata Owner</h2>
             <input type="password" id="ownerPwd" class="modal-input" placeholder="Password di accesso">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px">
@@ -173,14 +173,14 @@
             </div>
         </div>
 
-        <div id="modalName" class="modal-box hidden">
+        <div id="modalName" class="modal-box hidden" onclick="event.stopPropagation()">
             <h2>Personalizza Profilo</h2>
             <p style="margin: 15px 0; color:var(--text-muted)">Inserisci il tuo nome (Max 20 caratteri).</p>
             <input type="text" id="nameIn" class="modal-input" maxlength="20">
             <button class="modal-input" style="background:var(--primary); color:white; border:none; font-weight:bold" onclick="updateProfileName()">Salva Nome</button>
         </div>
 
-        <div id="modalNote" class="modal-box hidden">
+        <div id="modalNote" class="modal-box hidden" onclick="event.stopPropagation()">
             <h2 id="noteHeader">Crea Nota</h2>
             <div style="margin-top:20px">
                 <label style="font-size:0.8rem; font-weight:bold">Titolo</label>
@@ -205,14 +205,14 @@
             </div>
         </div>
 
-        <div id="modalVerify" class="modal-box hidden">
+        <div id="modalVerify" class="modal-box hidden" onclick="event.stopPropagation()">
             <h2>Verifica Identità</h2>
             <p style="margin:15px 0">Inserisci la password segreta della nota.</p>
             <input type="password" id="verifyPass" class="modal-input">
             <button id="verifyBtn" class="modal-input" style="background:var(--primary); color:white; border:none; font-weight:bold">Conferma</button>
         </div>
 
-        <div id="modalComment" class="modal-box hidden">
+        <div id="modalComment" class="modal-box hidden" onclick="event.stopPropagation()">
             <h2>Aggiungi Commento</h2>
             <textarea id="commText" class="modal-input" style="margin-top:20px; min-height:120px" placeholder="Scrivi qui il tuo messaggio anonimo..."></textarea>
             <button class="modal-input" style="background:var(--primary); color:white; border:none; font-weight:bold" onclick="submitComment()">Invia</button>
@@ -387,7 +387,7 @@ function openNoteModal(id = null) {
         tIn.value = n.title;
         txtIn.value = n.text;
         passIn.value = n.password;
-        document.getElementById('noteHeader').innerText = "Modifica Nota";
+        document.getElementById('noteHeader').innerText = "Modifica Prova";
         
         if(app.owner) {
             triggers.classList.remove('hidden');
@@ -398,7 +398,7 @@ function openNoteModal(id = null) {
         }
     } else {
         tIn.value = ''; txtIn.value = ''; passIn.value = '';
-        document.getElementById('noteHeader').innerText = "Nuova Nota";
+        document.getElementById('noteHeader').innerText = "Nuova Prova";
         triggers.classList.add('hidden');
     }
     showModal('modalNote');
@@ -479,7 +479,7 @@ function notifyAll(title, msg) {
     
     app.settings.emails.forEach(email => {
         emailjs.send(EJS_SERVICE_ID, EJS_TEMPLATE_ID, {
-            subject: "NOTIFICA CLOUDBOARD: " + title,
+            title: title,
             to_email: email,
             message: msg
         }).then(
@@ -600,4 +600,3 @@ function closeAllModals() {
     </script>
 </body>
 </html>
-
